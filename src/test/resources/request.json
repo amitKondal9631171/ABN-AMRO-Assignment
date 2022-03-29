@@ -1,0 +1,16 @@
+{
+  "name":"Gudi",
+  "cookingInstructions":"Testing instructions",
+  "recipeType":"NonVeg",
+  "ingredients": [{
+    "name":"1"
+  },
+    {
+      "name":"2"
+    },
+    {
+      "name":"3"
+    }
+  ]
+
+}
