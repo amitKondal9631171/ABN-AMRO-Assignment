@@ -13,8 +13,7 @@ import lombok.Data;
 @Data
 public class ApiErrorDTO {
 
-
-    private String message;
+   private String message;
     private int errorCode;
     private String endPoint;
 
@@ -23,4 +22,5 @@ public class ApiErrorDTO {
         this.message = message;
         this.endPoint = endPoint;
     }
+
 }
