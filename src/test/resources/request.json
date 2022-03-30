@@ -1,16 +1,33 @@
 {
-  "name":"Gudi",
-  "cookingInstructions":"Testing instructions",
-  "recipeType":"NonVeg",
+  "id":1,
+  "name":"Mushroom",
+  "cookingInstructions":"1. Boil 2 cups of water in a pot.; 2. Add 1 cup tomatoes, half inch ginger, garlic, nuts.; 3. Mix in cooking oil and cook for 15 minutes.",
+  "recipeType":"Veg",
   "ingredients": [{
-    "name":"1"
-  },
-    {
-      "name":"2"
+      "name":"Mushroom"
     },
     {
-      "name":"3"
+      "name":"Ginger"
+    },
+    {
+      "name":"Garlic"
+    },
+    {
+      "name":"nuts"
+    },
+    {
+      "name":"cashew"
+    },
+    {
+      "name":"blender jar"
+    },
+    {
+      "name":"cooking oil"
+    },
+    {
+      "name":"salt"
     }
+
   ]
 
 }

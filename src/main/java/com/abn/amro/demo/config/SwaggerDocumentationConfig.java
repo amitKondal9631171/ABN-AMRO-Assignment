@@ -1,3 +1,7 @@
+/**
+ * API swagger configuration.
+ */
+
 package com.abn.amro.demo.config;
 
 import org.springframework.context.annotation.Bean;

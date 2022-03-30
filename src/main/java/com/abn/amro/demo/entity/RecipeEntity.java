@@ -6,24 +6,22 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.sql.Date;
 import java.util.Set;
 
 @Entity
 @Table(name = "tbl_recipe")
 @Data
-public class RecipeEntity implements Serializable {
+public class RecipeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "recipe_name", nullable = false, length = 50)
-    private String name;
+     private String name;
 
-    @Lob
-    @Column(name = "cooking_instructions", nullable = false)
+    @Column(name = "cooking_instructions", nullable = false, length = 225)
     private String cookingInstructions;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, targetEntity = IngredientEntity.class)

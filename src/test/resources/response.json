@@ -1,20 +1,33 @@
 {
-  "id": 1,
-  "name":"Vikas",
-  "cookingInstructions":"Testing instructions",
-  "recipeType":"NonVeg",
+  "id":1,
+  "name":"Mushroom",
+  "cookingInstructions":"1. Boil 2 cups of water in a pot.; 2. Add 1 cup tomatoes, half inch ginger, garlic, nuts.; 3. Mix in cooking oil and cook for 15 minutes.",
+  "recipeType":"Veg",
   "ingredients": [{
-    "id":1,
-    "name":"1"
+    "name":"Mushroom"
   },
     {
-      "id":2,
-      "name":"2"
+      "name":"Ginger"
     },
     {
-      "id":3,
-      "name":"3"
+      "name":"Garlic"
+    },
+    {
+      "name":"nuts"
+    },
+    {
+      "name":"cashew"
+    },
+    {
+      "name":"blender jar"
+    },
+    {
+      "name":"cooking oil"
+    },
+    {
+      "name":"salt"
     }
+
   ]
 
 }

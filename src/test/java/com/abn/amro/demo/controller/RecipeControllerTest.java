@@ -11,6 +11,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.ResourceUtils;
 
@@ -29,9 +31,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-//@ActiveProfiles("test")
-//@WithMockUser(username = "user", password = "password", roles = "USER")
-public class RecipeControllerTest {
+@WithMockUser(username = "user", password = "password", roles = "USER")
+class RecipeControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -40,56 +41,53 @@ public class RecipeControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    public String getRequestJson() throws IOException {
+    String getRequestJson() throws IOException {
          return Files.readString(Path.of("./src/test/resources/request.json"));
       }
 
-    public RequestDTO getRequestDTO() throws IOException {
+    RequestDTO getRequestDTO() throws IOException {
         return objectMapper.readValue(ResourceUtils.getFile("./src/test/resources/request.json"), RequestDTO.class);
     }
 
-    public ResponseDTO getResponseDTO() throws IOException {
+    ResponseDTO getResponseDTO() throws IOException {
          return objectMapper.readValue(ResourceUtils.getFile("./src/test/resources/response.json"), ResponseDTO.class);
     }
 
     @Test
-    public void testAdd() throws Exception {
+    void testAdd() throws Exception {
         Mockito.when(service.addRecipe(getRequestDTO())).thenReturn(getResponseDTO());
         mockMvc.perform(
                 post("/add-recipe")
-                        /*.with(csrf())*/
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(getRequestJson())
         ).andExpect(status().isCreated());
     }
 
     @Test
-    public void testUpdate() throws Exception {
+    void testUpdate() throws Exception {
         Mockito.when(service.addRecipe(getRequestDTO())).thenReturn(getResponseDTO());
         mockMvc.perform(
                 put("/update-recipe")
-                        /*.with(csrf())*/
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(getRequestJson())
         ).andExpect(status().isOk());
     }
 
     @Test
-    public void testSelect() throws Exception {
+    void testSelect() throws Exception {
         Mockito.when(service.selectRecipe(1L)).thenReturn(getResponseDTO());
         mockMvc.perform(get("/select-recipe/{id}", 1L)).andExpect(status().isOk());
     }
 
     @Test
-    public void testSelectAll() throws Exception {
+    void testSelectAll() throws Exception {
         Mockito.when(service.selectRecipes()).thenReturn(Stream.of(getResponseDTO()).collect(Collectors.toList()));
-        mockMvc.perform(get("/select-recipes")).andExpect(status().isOk());
+        mockMvc.perform(get("/select-all-recipe")).andExpect(status().isOk());
     }
 
     @Test
-    public void testDelete() throws Exception {
+    void testDelete() throws Exception {
         mockMvc.perform(delete("/delete-recipe/{id}", 1L)
-                /*.with(csrf())*/
-        ).andExpect(status().isNoContent());
+        ).andExpect(status().isOk());
     }
 }

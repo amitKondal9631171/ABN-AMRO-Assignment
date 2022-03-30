@@ -1,23 +1,21 @@
+/**
+ * Custom class to handle runtime exception to send custom messages to client.
+ */
 package com.abn.amro.demo.exceptions;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 
-import java.time.LocalTime;
-
 @Data
-@NoArgsConstructor
 public class RecipeProcessingException extends RuntimeException {
 
-    private String errorMessage;
-    private HttpStatus httpStatus;
+    private final String message;
+    private final HttpStatus httpStatus;
 
-    public RecipeProcessingException(String errorMessage, HttpStatus httpStatus) {
-        super(errorMessage);
-        this.errorMessage = errorMessage;
+    public RecipeProcessingException(final String message, final HttpStatus httpStatus) {
+        super(message);
+        this.message = message;
         this.httpStatus = httpStatus;
     }
+
 }
