@@ -55,9 +55,9 @@ public class RecipeServiceImpl implements RecipeService {
     public ResponseDTO updateRecipe(RequestDTO requestDTO) {
         Optional<RecipeEntity> recipeEntity = recipeDao.findById(requestDTO.getId());
         logger.debug("Recipe found to update {}", recipeEntity.isPresent());
-        if(!recipeEntity.isPresent())
-              throw  new RecipeProcessingException("Recipe not found to update with id: " + requestDTO.getId(),
-                        HttpStatus.NOT_FOUND);
+        if (!recipeEntity.isPresent())
+            throw new RecipeProcessingException("Recipe not found to update with id: " + requestDTO.getId(),
+                    HttpStatus.NOT_FOUND);
         RecipeEntity updatedEntity = modelMapper.map(requestDTO, RecipeEntity.class);
         return modelMapper.map(recipeDao.save(updatedEntity), ResponseDTO.class);
     }
@@ -65,6 +65,7 @@ public class RecipeServiceImpl implements RecipeService {
     /**
      * Method to fetch the persisted recipe based on id. Mapping the entity to response dto.
      * if not found then user friendly message is returned.
+     *
      * @param id
      * @return
      */
@@ -80,6 +81,7 @@ public class RecipeServiceImpl implements RecipeService {
     /**
      * Method to fetch all the persisted recipes, sorting the recipes based on name
      * and mapping to response DTO.
+     *
      * @return
      */
     @Override
@@ -94,6 +96,7 @@ public class RecipeServiceImpl implements RecipeService {
     /**
      * Method to delete the recipe with provided id.
      * if not found then user friendly message is returned.
+     *
      * @param id
      * @return
      */

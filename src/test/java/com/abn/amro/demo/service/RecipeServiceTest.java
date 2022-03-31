@@ -23,13 +23,15 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 class RecipeServiceTest {
 
+    private static final String ERROR_MESSAGE = "Recipe not found";
     @Autowired
     private ObjectMapper objectMapper;
     @MockBean
@@ -38,8 +40,6 @@ class RecipeServiceTest {
     private RecipeService recipeService;
     @MockBean
     private ModelMapper modelMapper;
-
-    private static final String ERROR_MESSAGE = "Recipe not found";
 
     RequestDTO getRequestDTO() throws IOException {
         return objectMapper.readValue(ResourceUtils.getFile("./src/test/resources/request.json"), RequestDTO.class);
@@ -56,56 +56,80 @@ class RecipeServiceTest {
 
     @Test
     void testAdd() throws Exception {
-        Mockito.when(modelMapper.map(getRequestDTO(), RecipeEntity.class)).thenReturn(getRecipeEntity());
+        //Given
+        RequestDTO requestDTO = getRequestDTO();
+        Mockito.when(modelMapper.map(requestDTO, RecipeEntity.class)).thenReturn(getRecipeEntity());
         Mockito.when(modelMapper.map(getRecipeEntity(), ResponseDTO.class)).thenReturn(getResponseDTO());
         Mockito.when(recipeDao.save(getRecipeEntity())).thenReturn(getRecipeEntity());
+        //When
         ResponseDTO responseDTO = recipeService.addRecipe(getRequestDTO());
+        //Then
         assertEquals("Mushroom", responseDTO.getName());
     }
 
     @Test
     void testUpdate() throws Exception {
-        assertNotNull(recipeDao);
-        Mockito.when(recipeDao.findById(getRequestDTO().getId())).thenReturn(Optional.of(getRecipeEntity()));
+        //Given
+        RequestDTO requestDTO = getRequestDTO();
+
+        Mockito.when(recipeDao.findById(requestDTO.getId())).thenReturn(Optional.of(getRecipeEntity()));
         Mockito.when(modelMapper.map(getRequestDTO(), RecipeEntity.class)).thenReturn(getRecipeEntity());
         Mockito.when(recipeDao.save(getRecipeEntity())).thenReturn(getRecipeEntity());
         Mockito.when(modelMapper.map(getRecipeEntity(), ResponseDTO.class)).thenReturn(getResponseDTO());
+        //When
         ResponseDTO responseDTO = recipeService.updateRecipe(getRequestDTO());
-        assertEquals("Veg", responseDTO.getRecipeType() );
+        //Then
+        assertEquals("Veg", responseDTO.getRecipeType());
     }
 
     @Test
     void testSelect() throws Exception {
-        Mockito.when(recipeDao.findById(1L)).thenReturn(Optional.of(getRecipeEntity()));
+        //Given
+        Long recipeId = 1L;
+
+        Mockito.when(recipeDao.findById(recipeId)).thenReturn(Optional.of(getRecipeEntity()));
         Mockito.when(modelMapper.map(getRecipeEntity(), ResponseDTO.class)).thenReturn(getResponseDTO());
+        //When
         ResponseDTO responseDTO = recipeService.selectRecipe(1L);
+        //Then
         assertEquals(1, responseDTO.getId());
     }
 
     @Test
     void testSelectAll() throws Exception {
         List<RecipeEntity> entities = Stream.of(getRecipeEntity()).collect(Collectors.toList());
+        //When
         Mockito.when(recipeDao.findAll()).thenReturn(entities);
         Mockito.when(modelMapper.map(entities, new TypeToken<List<ResponseDTO>>() {
         }.getType())).thenReturn(entities);
         List<RecipeEntity> responseDTO = recipeDao.findAll();
+        //Then
         assertSame(entities, responseDTO);
     }
 
     @Test
     void testDelete() throws Exception {
-        when(recipeDao.findById(1L)).thenReturn(Optional.of(getRecipeEntity()));
+        //Given
+        Long recipeId = 1L;
+        when(recipeDao.findById(recipeId)).thenReturn(Optional.of(getRecipeEntity()));
+        //When
         recipeService.deleteRecipe(1L);
+        //Then
         verify(recipeDao, times(1)).findById(1L);
     }
 
     @Test
     void testUpdateResourceNotFoundException() {
         RecipeProcessingException expectedException = new RecipeProcessingException("Recipe not found to update with id: 1", HttpStatus.NOT_FOUND);
-        when(recipeDao.findById(1L)).thenThrow(expectedException);
-        try{
+        //Given
+        Long recipeId = 1L;
+
+        when(recipeDao.findById(recipeId)).thenThrow(expectedException);
+        try {
+            //When
             recipeService.updateRecipe(getRequestDTO());
-        }catch (IOException | RecipeProcessingException ex){
+        } catch (IOException | RecipeProcessingException ex) {
+            //Then
             assertSame(ex, expectedException);
         }
     }
@@ -114,9 +138,9 @@ class RecipeServiceTest {
     void testSelectResourceNotFoundException() {
         RecipeProcessingException expectedException = new RecipeProcessingException("Recipe not found with id: 1", HttpStatus.NOT_FOUND);
         when(recipeDao.findById(1L)).thenThrow(expectedException);
-        try{
+        try {
             recipeService.selectRecipe(1L);
-        }catch (RecipeProcessingException ex){
+        } catch (RecipeProcessingException ex) {
             assertSame(ex, expectedException);
         }
     }
@@ -125,9 +149,9 @@ class RecipeServiceTest {
     void testDeleteResourceNotFoundException() {
         RecipeProcessingException expectedException = new RecipeProcessingException("Recipe not found to select with id: 1", HttpStatus.NOT_FOUND);
         when(recipeDao.findById(1L)).thenThrow(expectedException);
-        try{
+        try {
             recipeService.deleteRecipe(1L);
-        }catch (RecipeProcessingException ex){
+        } catch (RecipeProcessingException ex) {
             assertSame(ex, expectedException);
         }
     }

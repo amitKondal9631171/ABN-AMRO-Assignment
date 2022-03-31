@@ -1,0 +1,279 @@
+{
+	"id": "431cdaee-d945-1753-7849-74ee01873228",
+	"name": "recipe",
+	"description": "",
+	"order": [
+		"d9114655-bcfd-1594-fc4b-1c93bb310d66",
+		"163181f0-38e7-fde4-05db-4bb87f5b123e",
+		"2726af52-3fd0-2c71-07da-ae0d05a82539",
+		"678464f5-4ea0-2ab0-f972-b5bbea7472bc",
+		"9ef051cf-cf52-6907-c53e-74aa35eccd43",
+		"fdb000d2-14ab-25fa-f441-8a50bec57d47",
+		"27b3a4dd-f58a-536e-47b4-4cbbed0e0fb6",
+		"a51e8c12-a63c-cd30-61e0-995ab70885bd"
+	],
+	"folders": [],
+	"folders_order": [],
+	"timestamp": 1648622105266,
+	"owner": "746835",
+	"public": false,
+	"requests": [
+		{
+			"id": "163181f0-38e7-fde4-05db-4bb87f5b123e",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "localhost:8080/abn-amro-assignment/update-recipe",
+			"queryParams": [],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"preRequestScript": null,
+			"method": "PUT",
+			"collectionId": "431cdaee-d945-1753-7849-74ee01873228",
+			"data": [],
+			"dataMode": "raw",
+			"name": "Update-Recipe",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1648699506835,
+			"version": 2,
+			"responses": [],
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"rawModeData": "{\n    \"id\": 1,\n    \"name\": \"Mushroom U\",\n    \"cookingInstructions\": \"1. Boil 2 cups of water in a pot.; 2. Add 1 cup tomatoes, half inch ginger, garlic, nuts.; 3. Mix in cooking oil and cook for 15 minutes.\",\n    \"ingredients\": [\n        {\n            \"id\": 1,\n            \"name\": \"blender jar\"\n        },\n        {\n            \"id\": 2,\n            \"name\": \"Garlic\"\n        },\n        {\n            \"id\": 3,\n            \"name\": \"Ginger\"\n        },\n        {\n            \"id\": 4,\n            \"name\": \"Mushroom\"\n        },\n        {\n            \"id\": 5,\n            \"name\": \"nuts\"\n        },\n        {\n            \"id\": 6,\n            \"name\": \"cashew\"\n        },\n        {\n            \"id\": 7,\n            \"name\": \"cooking oil\"\n        },\n        {\n            \"id\": 8,\n            \"name\": \"salt\"\n        }\n    ],\n    \"recipeType\": \"Veg\"\n}"
+		},
+		{
+			"id": "2726af52-3fd0-2c71-07da-ae0d05a82539",
+			"headers": "Authorization: Basic dXNlcjpwYXNzd29yZA==\n",
+			"headerData": [
+				{
+					"key": "Authorization",
+					"value": "Basic dXNlcjpwYXNzd29yZA==",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "localhost:8080/abn-amro-assignment/select-all-recipe",
+			"queryParams": [],
+			"preRequestScript": null,
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "GET",
+			"data": null,
+			"dataMode": "params",
+			"version": 2,
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1648699313143,
+			"name": "Relect-All-Recipes",
+			"description": "",
+			"collectionId": "431cdaee-d945-1753-7849-74ee01873228",
+			"responses": []
+		},
+		{
+			"id": "27b3a4dd-f58a-536e-47b4-4cbbed0e0fb6",
+			"headers": "Authorization: Basic dXNlcjpwYXNzd29yZA==\n",
+			"headerData": [
+				{
+					"key": "Authorization",
+					"value": "Basic dXNlcjpwYXNzd29yZA==",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "localhost:8080/abn-amro-assignment/delete-recipe/10",
+			"queryParams": [],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"preRequestScript": null,
+			"method": "GET",
+			"collectionId": "431cdaee-d945-1753-7849-74ee01873228",
+			"data": null,
+			"dataMode": "params",
+			"name": "Delete-Not-Found",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1648724832816,
+			"version": 2,
+			"responses": [],
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		},
+		{
+			"id": "678464f5-4ea0-2ab0-f972-b5bbea7472bc",
+			"headers": "Authorization: Basic dXNlcjpwYXNzd29yZA==\n",
+			"headerData": [
+				{
+					"key": "Authorization",
+					"value": "Basic dXNlcjpwYXNzd29yZA==",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "localhost:8080/abn-amro-assignment/select-recipe/1",
+			"queryParams": [],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"preRequestScript": null,
+			"method": "GET",
+			"collectionId": "431cdaee-d945-1753-7849-74ee01873228",
+			"data": null,
+			"dataMode": "params",
+			"name": "Select-Recipe-With-Id",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1648699623378,
+			"version": 2,
+			"responses": [],
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		},
+		{
+			"id": "9ef051cf-cf52-6907-c53e-74aa35eccd43",
+			"headers": "Authorization: Basic dXNlcjpwYXNzd29yZA==\n",
+			"headerData": [
+				{
+					"key": "Authorization",
+					"value": "Basic dXNlcjpwYXNzd29yZA==",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "localhost:8080/abn-amro-assignment/delete-recipe/1",
+			"queryParams": [],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"preRequestScript": null,
+			"method": "DELETE",
+			"collectionId": "431cdaee-d945-1753-7849-74ee01873228",
+			"data": null,
+			"dataMode": "params",
+			"name": "Delete-Recipe",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1648699816977,
+			"version": 2,
+			"responses": [],
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		},
+		{
+			"id": "a51e8c12-a63c-cd30-61e0-995ab70885bd",
+			"headers": "Content-Type: application/json\nAuthorization: Basic dXNlcjpwYXNzd29yZA==\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "Authorization",
+					"value": "Basic dXNlcjpwYXNzd29yZA==",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "localhost:8080/abn-amro-assignment/add-recipe",
+			"queryParams": [],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"preRequestScript": null,
+			"method": "POST",
+			"collectionId": "431cdaee-d945-1753-7849-74ee01873228",
+			"data": [],
+			"dataMode": "raw",
+			"name": "Bad-Request",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1648727550265,
+			"version": 2,
+			"responses": [],
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"rawModeData": "{\r\n  \"name\":\"Mushroom Fry Mushroom FryMushroom FryMushroom FryMushroom FryMushroom FryMushroom FryMushroom FryMushroom FryMushroom FryMushroom Fry\",\r\n  \"cookingInstructions\":\"1. Boil 2 cups of water in a pot.; 2. Add 1 cup tomatoes, half inch ginger, garlic, nuts.; 3. Mix in cooking oil and cook for 15 minutes.1. Boil 2 cups of water in a pot.; 2. Add 1 cup tomatoes, half inch ginger, garlic, nuts.; 3. Mix in cooking oil and cook for 15 minutes.1. Boil 2 cups of water in a pot.; 2. Add 1 cup tomatoes, half inch ginger, garlic, nuts.; 3. Mix in cooking oil and cook for 15 minutes.1. Boil 2 cups of water in a pot.; 2. Add 1 cup tomatoes, half inch ginger, garlic, nuts.; 3. Mix in cooking oil and cook for 15 minutes.1. Boil 2 cups of water in a pot.; 2. Add 1 cup tomatoes, half inch ginger, garlic, nuts.; 3. Mix in cooking oil and cook for 15 minutes.1. Boil 2 cups of water in a pot.; 2. Add 1 cup tomatoes, half inch ginger, garlic, nuts.; 3. Mix in cooking oil and cook for 15 minutes.1. Boil 2 cups of water in a pot.; 2. Add 1 cup tomatoes, half inch ginger, garlic, nuts.; 3. Mix in cooking oil and cook for 15 minutes.1. Boil 2 cups of water in a pot.; 2. Add 1 cup tomatoes, half inch ginger, garlic, nuts.; 3. Mix in cooking oil and cook for 15 minutes.\",\r\n  \"recipeType\":\"Veg VegVegVegVegVegVegVegVegVegVegVegVegVegVegVegVegVegVegVegVegVegVegVegVegVeg\",\r\n  \"ingredients\": [{\r\n      \"name\":\"MushroomMushroomMushroomMushroomMushroomMushroomMushroomMushroomMushroomMushroomMushroomMushroomMushroomMushroomMushroom\"\r\n    },\r\n    {\r\n      \"name\":\"Ginger\"\r\n    },\r\n    {\r\n      \"name\":\"Garlic\"\r\n    },\r\n    {\r\n      \"name\":\"nuts\"\r\n    },\r\n    {\r\n      \"name\":\"cashew\"\r\n    },\r\n    {\r\n      \"name\":\"blender jar\"\r\n    },\r\n    {\r\n      \"name\":\"cooking oil\"\r\n    },\r\n    {\r\n      \"name\":\"salt\"\r\n    }\r\n\r\n  ]\r\n\r\n}"
+		},
+		{
+			"id": "d9114655-bcfd-1594-fc4b-1c93bb310d66",
+			"headers": "Content-Type: application/json\nAuthorization: Basic dXNlcjpwYXNzd29yZA==\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "Authorization",
+					"value": "Basic dXNlcjpwYXNzd29yZA==",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "localhost:8080/abn-amro-assignment/add-recipe",
+			"queryParams": [],
+			"preRequestScript": null,
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1648699359581,
+			"name": "Add-Recipe",
+			"description": "Save request",
+			"collectionId": "431cdaee-d945-1753-7849-74ee01873228",
+			"responses": [],
+			"rawModeData": "{\r\n  \"name\":\"Mushroom\",\r\n  \"cookingInstructions\":\"1. Boil 2 cups of water in a pot.; 2. Add 1 cup tomatoes, half inch ginger, garlic, nuts.; 3. Mix in cooking oil and cook for 15 minutes.\",\r\n  \"recipeType\":\"Veg\",\r\n  \"ingredients\": [{\r\n      \"name\":\"Mushroom\"\r\n    },\r\n    {\r\n      \"name\":\"Ginger\"\r\n    },\r\n    {\r\n      \"name\":\"Garlic\"\r\n    },\r\n    {\r\n      \"name\":\"nuts\"\r\n    },\r\n    {\r\n      \"name\":\"cashew\"\r\n    },\r\n    {\r\n      \"name\":\"blender jar\"\r\n    },\r\n    {\r\n      \"name\":\"cooking oil\"\r\n    },\r\n    {\r\n      \"name\":\"salt\"\r\n    }\r\n\r\n  ]\r\n\r\n}"
+		},
+		{
+			"id": "fdb000d2-14ab-25fa-f441-8a50bec57d47",
+			"headers": "Authorization: Basic dXNlcjpwYXNzd29yZA==\nContent-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Authorization",
+					"value": "Basic dXNlcjpwYXNzd29yZA==",
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "localhost:8080/abn-amro-assignment/update-recipe",
+			"queryParams": [],
+			"preRequestScript": null,
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "PUT",
+			"data": [],
+			"dataMode": "raw",
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1648701709981,
+			"name": "Recipe-Not-Found-For-Update",
+			"description": "",
+			"collectionId": "431cdaee-d945-1753-7849-74ee01873228",
+			"responses": [],
+			"rawModeData": "{\n    \"id\": 15,\n    \"name\": \"Mushroom U\",\n    \"cookingInstructions\": \"1. Boil 2 cups of water in a pot.; 2. Add 1 cup tomatoes, half inch ginger, garlic, nuts.; 3. Mix in cooking oil and cook for 15 minutes.\",\n    \"ingredients\": [\n        {\n            \"id\": 1,\n            \"name\": \"blender jar\"\n        },\n        {\n            \"id\": 2,\n            \"name\": \"Garlic\"\n        },\n        {\n            \"id\": 3,\n            \"name\": \"Ginger\"\n        },\n        {\n            \"id\": 4,\n            \"name\": \"Mushroom\"\n        },\n        {\n            \"id\": 5,\n            \"name\": \"nuts\"\n        },\n        {\n            \"id\": 6,\n            \"name\": \"cashew\"\n        },\n        {\n            \"id\": 7,\n            \"name\": \"cooking oil\"\n        },\n        {\n            \"id\": 8,\n            \"name\": \"salt\"\n        }\n    ],\n    \"recipeType\": \"Veg\"\n}"
+		}
+	]
+}

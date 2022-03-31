@@ -1,58 +1,108 @@
 package com.abn.amro.demo.dao;
 
-import com.abn.amro.demo.dto.RequestDTO;
-import com.abn.amro.demo.dto.ResponseDTO;
+import com.abn.amro.demo.entity.IngredientEntity;
 import com.abn.amro.demo.entity.RecipeEntity;
 import com.abn.amro.demo.exceptions.RecipeProcessingException;
-import com.abn.amro.demo.service.RecipeService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.modelmapper.ModelMapper;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.http.HttpStatus;
-import org.springframework.util.ResourceUtils;
+import org.springframework.test.annotation.Rollback;
 
-import java.io.IOException;
-import java.util.Optional;
+import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
-@SpringBootTest
-@AutoConfigureMockMvc
+@DataJpaTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class RecipeDaoTest {
 
     @Autowired
-    private ObjectMapper objectMapper;
-    @MockBean
     private RecipeDao recipeDao;
-    @Autowired
-    private RecipeService recipeService;
-    @MockBean
-    private ModelMapper modelMapper;
 
-    private RequestDTO getRequestDTO() throws IOException {
-        return objectMapper.readValue(ResourceUtils.getFile("./src/test/resources/request.json"), RequestDTO.class);
+    private RecipeEntity getRecipeEntity() {
+        RecipeEntity entity = new RecipeEntity();
+        entity.setName("Mushroom");
+        entity.setRecipeType("VEG");
+        entity.setCookingInstructions("1. Boil 2 cups of water in a pot.; 2. Add 1 cup tomatoes, half inch ginger, garlic, nuts.; 3. Mix in cooking oil and cook for 15 minutes.");
+        IngredientEntity ingredientEntity1 = new IngredientEntity();
+        ingredientEntity1.setName("Mushroom");
+        IngredientEntity ingredientEntity2 = new IngredientEntity();
+        ingredientEntity2.setName("Cooking oil");
+        Set<IngredientEntity> ingredients = new HashSet<IngredientEntity>();
+        ingredients.add(ingredientEntity1);
+        ingredients.add(ingredientEntity2);
+        entity.setIngredients(ingredients);
+        return entity;
     }
 
     @Test
-    void testAdd() throws Exception {
-        RequestDTO entity = getRequestDTO();
-        entity.setName("MushroomMushroomMushroomMushroomMushroomMushroomMushroomMushroomMushroomMushroomMushroomMushroomMushroom");
-        DataIntegrityViolationException expectedException = new DataIntegrityViolationException("Value too long for column");
-         try{
-            recipeService.addRecipe(entity);
-        }catch (DataIntegrityViolationException ex){
-            assertSame(ex, expectedException);
-            assertTrue(ex.getCause().getCause().getMessage().contains(expectedException.getCause().getCause().getMessage()));
-        }
+    @Order(1)
+    @Rollback(value = false)
+    void testAddTest() {
+        //Given
+        RecipeEntity entity = getRecipeEntity();
+        //When
+        RecipeEntity responseEntity = recipeDao.save(entity);
+        //Then
+        Assertions.assertThat(responseEntity.getId()).isPositive();
     }
 
+    @Test
+    @Order(2)
+    @Rollback(value = false)
+    void getRecipeTest() {
+        //Given
+        Long recipeId = 1L;
+        RecipeEntity responseEntity = recipeDao.findById(recipeId).get();
+        Assertions.assertThat(responseEntity.getId()).isEqualTo(recipeId);
+    }
+
+    @Test
+    @Order(3)
+    void getListOfRecipesTest() {
+
+        List<RecipeEntity> entityList = recipeDao.findAll();
+
+        Assertions.assertThat(entityList).isNotEmpty();
+
+    }
+
+    @Test
+    @Order(4)
+    @Rollback(value = false)
+    void testUpdate() {
+        //Given
+        Long recipeId = 1L;
+        RecipeEntity persistedEntity = recipeDao.findById(recipeId).get();
+        IngredientEntity ingredientEntity = new IngredientEntity();
+        ingredientEntity.setName("Nuts");
+        persistedEntity.getIngredients().add(ingredientEntity);
+        RecipeEntity updatedEntity = recipeDao.save(persistedEntity);
+        Assertions.assertThat(updatedEntity).isEqualTo(persistedEntity);
+    }
+
+    @Test
+    @Order(5)
+    @Rollback(value = false)
+    void deleteRecipeTest() {
+        //Given
+        Long recipeId = 1L;
+        Optional<RecipeEntity> responseEntity = recipeDao.findById(recipeId);
+        RecipeEntity persistedEntity = responseEntity.orElseThrow(() -> new RecipeProcessingException("Exception executing dao layer", HttpStatus.BAD_REQUEST));
+        recipeDao.delete(persistedEntity);
+        NoSuchElementException expected = new NoSuchElementException("No value present");
+        try {
+
+            recipeDao.findById(recipeId);
+        } catch (NoSuchElementException actualException) {
+            assertSame(actualException, expected);
+        }
+    }
 
 }
 

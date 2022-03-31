@@ -12,22 +12,18 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.util.ResourceUtils;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-//import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
-
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -42,52 +38,75 @@ class RecipeControllerTest {
     private ObjectMapper objectMapper;
 
     String getRequestJson() throws IOException {
-         return Files.readString(Path.of("./src/test/resources/request.json"));
-      }
+        return Files.readString(Path.of("./src/test/resources/request.json"));
+    }
 
     RequestDTO getRequestDTO() throws IOException {
         return objectMapper.readValue(ResourceUtils.getFile("./src/test/resources/request.json"), RequestDTO.class);
     }
 
     ResponseDTO getResponseDTO() throws IOException {
-         return objectMapper.readValue(ResourceUtils.getFile("./src/test/resources/response.json"), ResponseDTO.class);
+        return objectMapper.readValue(ResourceUtils.getFile("./src/test/resources/response.json"), ResponseDTO.class);
     }
 
     @Test
     void testAdd() throws Exception {
-        Mockito.when(service.addRecipe(getRequestDTO())).thenReturn(getResponseDTO());
-        mockMvc.perform(
+        //Given
+        RequestDTO requestDTO = getRequestDTO();
+        //When
+        Mockito.when(service.addRecipe(requestDTO)).thenReturn(getResponseDTO());
+        ResultActions resultActions = mockMvc.perform(
                 post("/add-recipe")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(getRequestJson())
-        ).andExpect(status().isCreated());
+        );
+        //Then
+        resultActions.andExpect(status().isCreated());
     }
 
     @Test
     void testUpdate() throws Exception {
-        Mockito.when(service.addRecipe(getRequestDTO())).thenReturn(getResponseDTO());
-        mockMvc.perform(
+        //Given
+        RequestDTO requestDTO = getRequestDTO();
+        //When
+        Mockito.when(service.addRecipe(requestDTO)).thenReturn(getResponseDTO());
+        ResultActions resultActions = mockMvc.perform(
                 put("/update-recipe")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(getRequestJson())
-        ).andExpect(status().isOk());
+        );
+        //Then
+        resultActions.andExpect(status().isOk());
     }
 
     @Test
     void testSelect() throws Exception {
-        Mockito.when(service.selectRecipe(1L)).thenReturn(getResponseDTO());
-        mockMvc.perform(get("/select-recipe/{id}", 1L)).andExpect(status().isOk());
+        //Given
+        Long recipeId = 1L;
+        //When
+        Mockito.when(service.selectRecipe(recipeId)).thenReturn(getResponseDTO());
+        ResultActions resultActions = mockMvc.perform(get("/select-recipe/{id}", 1L));
+        //Then
+        resultActions.andExpect(status().isOk());
     }
 
     @Test
     void testSelectAll() throws Exception {
+        //When
         Mockito.when(service.selectRecipes()).thenReturn(Stream.of(getResponseDTO()).collect(Collectors.toList()));
-        mockMvc.perform(get("/select-all-recipe")).andExpect(status().isOk());
+        ResultActions resultActions = mockMvc.perform(get("/select-all-recipe"));
+        //Then
+        resultActions.andExpect(status().isOk());
     }
 
     @Test
     void testDelete() throws Exception {
-        mockMvc.perform(delete("/delete-recipe/{id}", 1L)
-        ).andExpect(status().isOk());
+        //Given
+        Long recipeId = 1L;
+        //When
+        ResultActions resultActions = mockMvc.perform(delete("/delete-recipe/{id}", recipeId)
+        );
+        //Then
+        resultActions.andExpect(status().isOk());
     }
 }

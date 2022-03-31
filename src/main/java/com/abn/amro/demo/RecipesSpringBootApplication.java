@@ -13,6 +13,10 @@ public class RecipesSpringBootApplication {
         SpringApplication.run(RecipesSpringBootApplication.class, args);
     }
 
+    /**
+     * Initializing bean for DTO to Entities and vice versa
+     * @return
+     */
     @Bean
     public ModelMapper modelMapper() {
         return new ModelMapper();

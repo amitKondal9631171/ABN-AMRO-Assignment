@@ -18,17 +18,17 @@ public class RecipeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "recipe_name", nullable = false, length = 50)
+    @Column(name = "recipe_name")
      private String name;
 
-    @Column(name = "cooking_instructions", nullable = false, length = 225)
+    @Column(name = "cooking_instructions")
     private String cookingInstructions;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, targetEntity = IngredientEntity.class)
     @JoinColumn(name = "ri_fid", referencedColumnName = "id", nullable = false)
     private Set<IngredientEntity> ingredients;
 
-    @Column(name = "recipe_type", length = 20, nullable = false)
+    @Column(name = "recipe_type")
     private String recipeType;
 
     @CreationTimestamp

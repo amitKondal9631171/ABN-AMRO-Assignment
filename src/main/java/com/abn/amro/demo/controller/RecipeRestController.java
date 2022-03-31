@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -31,13 +32,11 @@ public class RecipeRestController {
 
     /**
      * Endpoint receives a POST request, add the recipe and gives back the updated recipe.
-     *
      * @return
      */
     @PostMapping(value = "/add-recipe")
-    public ResponseEntity<ResponseDTO> addRecipe(@RequestBody RequestDTO recipeRequest) {
+    public ResponseEntity<ResponseDTO> addRecipe(@Valid @RequestBody RequestDTO recipeRequest) {
         logger.info("Request received to add the recipe with name: {}", recipeRequest.getName());
-
         return new ResponseEntity<>(recipeService.addRecipe(recipeRequest), HttpStatus.CREATED);
     }
 
@@ -82,10 +81,10 @@ public class RecipeRestController {
      * @return
      */
     @DeleteMapping(value = "/delete-recipe/{id}")
-    public ResponseEntity<HttpStatus> deleteRecipe(@PathVariable Long id) {
+    public String deleteRecipe(@PathVariable Long id) {
         logger.info("Request received to delete the recipe id: {}", id);
         recipeService.deleteRecipe(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return "Recipe deleted with id: " + id;
     }
 
 }
