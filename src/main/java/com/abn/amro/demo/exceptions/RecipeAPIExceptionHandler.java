@@ -57,6 +57,11 @@ public class RecipeAPIExceptionHandler {
         return new ResponseEntity<>(new ApiErrorDTO(HttpStatus.BAD_REQUEST.value(), dataViolationException.getCause().getCause().getMessage(), servletRequest.getRequestURI()), HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Method to handle request data validations
+     * @param exception
+     * @return
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handleRequestExceptions(MethodArgumentNotValidException exception) {
         logger.error(COMMON_ERROR_MESSAGE, exception);
