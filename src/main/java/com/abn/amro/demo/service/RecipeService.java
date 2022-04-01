@@ -1,7 +1,6 @@
 package com.abn.amro.demo.service;
 
-import com.abn.amro.demo.dto.RequestDTO;
-import com.abn.amro.demo.dto.ResponseDTO;
+import com.abn.amro.demo.dto.RecipeDTO;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -9,13 +8,13 @@ import java.util.List;
 @Transactional
 public interface RecipeService {
 
-    ResponseDTO addRecipe(RequestDTO recipe);
+    RecipeDTO addRecipe(RecipeDTO recipe);
 
-    ResponseDTO updateRecipe(RequestDTO recipe);
+    RecipeDTO updateRecipe(RecipeDTO recipe);
 
-    ResponseDTO selectRecipe(Long id);
+    RecipeDTO selectRecipe(Long id);
 
-    List<ResponseDTO> selectRecipes();
+    List<RecipeDTO> selectRecipes();
 
     boolean deleteRecipe(Long id);
 }

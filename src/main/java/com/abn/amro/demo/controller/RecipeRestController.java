@@ -4,10 +4,8 @@
 
 package com.abn.amro.demo.controller;
 
-import com.abn.amro.demo.dto.RequestDTO;
-import com.abn.amro.demo.dto.ResponseDTO;
+import com.abn.amro.demo.dto.RecipeDTO;
 import com.abn.amro.demo.service.RecipeService;
-import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,15 +25,13 @@ public class RecipeRestController {
     @Autowired
     private RecipeService recipeService;
 
-    @Autowired
-    private ModelMapper modelMapper;
-
     /**
      * Endpoint receives a POST request, add the recipe and gives back the updated recipe.
-     * @return
+     *
+     * @return persisted entity
      */
     @PostMapping(value = "/add-recipe")
-    public ResponseEntity<ResponseDTO> addRecipe(@Valid @RequestBody RequestDTO recipeRequest) {
+    public ResponseEntity<RecipeDTO> addRecipe(@Valid @RequestBody RecipeDTO recipeRequest) {
         logger.info("Request received to add the recipe with name: {}", recipeRequest.getName());
         return new ResponseEntity<>(recipeService.addRecipe(recipeRequest), HttpStatus.CREATED);
     }
@@ -43,10 +39,10 @@ public class RecipeRestController {
     /**
      * Endpoint receives a PUT request, update the recipe details based on ID and gives back the updated recipe.
      *
-     * @return
+     * @return updated recipe
      */
     @PutMapping(value = "/update-recipe")
-    public ResponseEntity<ResponseDTO> updateRecipe(@RequestBody RequestDTO recipeRequest) {
+    public ResponseEntity<RecipeDTO> updateRecipe(@Valid @RequestBody RecipeDTO recipeRequest) {
         logger.info("Request received to update the recipe with name and id: {} {}", recipeRequest.getName(), recipeRequest.getId());
         return new ResponseEntity<>(recipeService.updateRecipe(recipeRequest), HttpStatus.OK);
     }
@@ -54,10 +50,10 @@ public class RecipeRestController {
     /**
      * Endpoint receives a GET request with recipe ID, processes it and gives back a recipe.
      *
-     * @return
+     * @return return recipe based on recipe-id
      */
     @GetMapping(value = "/select-recipe/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseDTO> selectRecipe(@PathVariable Long id) {
+    public ResponseEntity<RecipeDTO> selectRecipe(@PathVariable Long id) {
         logger.info("Request received to select the recipe id: {}", id);
         return new ResponseEntity<>(recipeService.selectRecipe(id), HttpStatus.OK);
     }
@@ -65,10 +61,10 @@ public class RecipeRestController {
     /**
      * Endpoint receives a GET request, processes it and gives back a list of Recipes.
      *
-     * @return
+     * @return all recipes
      */
     @GetMapping(value = "/select-all-recipe", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<ResponseDTO>> selectAllRecipe() {
+    public ResponseEntity<List<RecipeDTO>> selectAllRecipe() {
         logger.info("Request received to select the recipes");
         return new ResponseEntity<>(recipeService.selectRecipes(), HttpStatus.OK);
     }

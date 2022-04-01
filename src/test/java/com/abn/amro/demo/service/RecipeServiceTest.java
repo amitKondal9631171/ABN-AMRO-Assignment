@@ -1,8 +1,7 @@
 package com.abn.amro.demo.service;
 
 import com.abn.amro.demo.dao.RecipeDao;
-import com.abn.amro.demo.dto.RequestDTO;
-import com.abn.amro.demo.dto.ResponseDTO;
+import com.abn.amro.demo.dto.RecipeDTO;
 import com.abn.amro.demo.entity.RecipeEntity;
 import com.abn.amro.demo.exceptions.RecipeProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -41,28 +40,24 @@ class RecipeServiceTest {
     @MockBean
     private ModelMapper modelMapper;
 
-    RequestDTO getRequestDTO() throws IOException {
-        return objectMapper.readValue(ResourceUtils.getFile("./src/test/resources/request.json"), RequestDTO.class);
+    RecipeDTO getRecipeDTO() throws IOException {
+        return objectMapper.readValue(ResourceUtils.getFile("./src/test/resources/request.json"), RecipeDTO.class);
     }
 
     RecipeEntity getRecipeEntity() throws IOException {
-        ResponseDTO responseDTO = objectMapper.readValue(ResourceUtils.getFile("./src/test/resources/response.json"), ResponseDTO.class);
+        RecipeEntity responseDTO = objectMapper.readValue(ResourceUtils.getFile("./src/test/resources/response.json"), RecipeEntity.class);
         return objectMapper.convertValue(responseDTO, RecipeEntity.class);
-    }
-
-    ResponseDTO getResponseDTO() throws IOException {
-        return objectMapper.readValue(ResourceUtils.getFile("./src/test/resources/response.json"), ResponseDTO.class);
     }
 
     @Test
     void testAdd() throws Exception {
         //Given
-        RequestDTO requestDTO = getRequestDTO();
-        Mockito.when(modelMapper.map(requestDTO, RecipeEntity.class)).thenReturn(getRecipeEntity());
-        Mockito.when(modelMapper.map(getRecipeEntity(), ResponseDTO.class)).thenReturn(getResponseDTO());
+        RecipeDTO recipeDTO = getRecipeDTO();
+        Mockito.when(modelMapper.map(recipeDTO, RecipeEntity.class)).thenReturn(getRecipeEntity());
+        Mockito.when(modelMapper.map(getRecipeEntity(), RecipeDTO.class)).thenReturn(getRecipeDTO());
         Mockito.when(recipeDao.save(getRecipeEntity())).thenReturn(getRecipeEntity());
         //When
-        ResponseDTO responseDTO = recipeService.addRecipe(getRequestDTO());
+        RecipeDTO responseDTO = recipeService.addRecipe(getRecipeDTO());
         //Then
         assertEquals("Mushroom", responseDTO.getName());
     }
@@ -70,14 +65,14 @@ class RecipeServiceTest {
     @Test
     void testUpdate() throws Exception {
         //Given
-        RequestDTO requestDTO = getRequestDTO();
+        RecipeDTO recipeDTO = getRecipeDTO();
 
-        Mockito.when(recipeDao.findById(requestDTO.getId())).thenReturn(Optional.of(getRecipeEntity()));
-        Mockito.when(modelMapper.map(getRequestDTO(), RecipeEntity.class)).thenReturn(getRecipeEntity());
+        Mockito.when(recipeDao.findById(recipeDTO.getId())).thenReturn(Optional.of(getRecipeEntity()));
+        Mockito.when(modelMapper.map(getRecipeDTO(), RecipeEntity.class)).thenReturn(getRecipeEntity());
         Mockito.when(recipeDao.save(getRecipeEntity())).thenReturn(getRecipeEntity());
-        Mockito.when(modelMapper.map(getRecipeEntity(), ResponseDTO.class)).thenReturn(getResponseDTO());
+        Mockito.when(modelMapper.map(getRecipeEntity(), RecipeDTO.class)).thenReturn(getRecipeDTO());
         //When
-        ResponseDTO responseDTO = recipeService.updateRecipe(getRequestDTO());
+        RecipeDTO responseDTO = recipeService.updateRecipe(getRecipeDTO());
         //Then
         assertEquals("Veg", responseDTO.getRecipeType());
     }
@@ -88,9 +83,9 @@ class RecipeServiceTest {
         Long recipeId = 1L;
 
         Mockito.when(recipeDao.findById(recipeId)).thenReturn(Optional.of(getRecipeEntity()));
-        Mockito.when(modelMapper.map(getRecipeEntity(), ResponseDTO.class)).thenReturn(getResponseDTO());
+        Mockito.when(modelMapper.map(getRecipeEntity(), RecipeDTO.class)).thenReturn(getRecipeDTO());
         //When
-        ResponseDTO responseDTO = recipeService.selectRecipe(1L);
+        RecipeDTO responseDTO = recipeService.selectRecipe(1L);
         //Then
         assertEquals(1, responseDTO.getId());
     }
@@ -100,7 +95,7 @@ class RecipeServiceTest {
         List<RecipeEntity> entities = Stream.of(getRecipeEntity()).collect(Collectors.toList());
         //When
         Mockito.when(recipeDao.findAll()).thenReturn(entities);
-        Mockito.when(modelMapper.map(entities, new TypeToken<List<ResponseDTO>>() {
+        Mockito.when(modelMapper.map(entities, new TypeToken<List<RecipeDTO>>() {
         }.getType())).thenReturn(entities);
         List<RecipeEntity> responseDTO = recipeDao.findAll();
         //Then
@@ -127,7 +122,7 @@ class RecipeServiceTest {
         when(recipeDao.findById(recipeId)).thenThrow(expectedException);
         try {
             //When
-            recipeService.updateRecipe(getRequestDTO());
+            recipeService.updateRecipe(getRecipeDTO());
         } catch (IOException | RecipeProcessingException ex) {
             //Then
             assertSame(ex, expectedException);

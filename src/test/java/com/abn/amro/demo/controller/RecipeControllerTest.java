@@ -1,7 +1,6 @@
 package com.abn.amro.demo.controller;
 
-import com.abn.amro.demo.dto.RequestDTO;
-import com.abn.amro.demo.dto.ResponseDTO;
+import com.abn.amro.demo.dto.RecipeDTO;
 import com.abn.amro.demo.service.RecipeService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -41,20 +40,16 @@ class RecipeControllerTest {
         return Files.readString(Path.of("./src/test/resources/request.json"));
     }
 
-    RequestDTO getRequestDTO() throws IOException {
-        return objectMapper.readValue(ResourceUtils.getFile("./src/test/resources/request.json"), RequestDTO.class);
-    }
-
-    ResponseDTO getResponseDTO() throws IOException {
-        return objectMapper.readValue(ResourceUtils.getFile("./src/test/resources/response.json"), ResponseDTO.class);
+    RecipeDTO getRecipeDTO() throws IOException {
+        return objectMapper.readValue(ResourceUtils.getFile("./src/test/resources/request.json"), RecipeDTO.class);
     }
 
     @Test
     void testAdd() throws Exception {
         //Given
-        RequestDTO requestDTO = getRequestDTO();
+        RecipeDTO recipeDTO = getRecipeDTO();
         //When
-        Mockito.when(service.addRecipe(requestDTO)).thenReturn(getResponseDTO());
+        Mockito.when(service.addRecipe(recipeDTO)).thenReturn(getRecipeDTO());
         ResultActions resultActions = mockMvc.perform(
                 post("/add-recipe")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -67,9 +62,9 @@ class RecipeControllerTest {
     @Test
     void testUpdate() throws Exception {
         //Given
-        RequestDTO requestDTO = getRequestDTO();
+        RecipeDTO recipeDTO = getRecipeDTO();
         //When
-        Mockito.when(service.addRecipe(requestDTO)).thenReturn(getResponseDTO());
+        Mockito.when(service.addRecipe(recipeDTO)).thenReturn(getRecipeDTO());
         ResultActions resultActions = mockMvc.perform(
                 put("/update-recipe")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -84,7 +79,7 @@ class RecipeControllerTest {
         //Given
         Long recipeId = 1L;
         //When
-        Mockito.when(service.selectRecipe(recipeId)).thenReturn(getResponseDTO());
+        Mockito.when(service.selectRecipe(recipeId)).thenReturn(getRecipeDTO());
         ResultActions resultActions = mockMvc.perform(get("/select-recipe/{id}", 1L));
         //Then
         resultActions.andExpect(status().isOk());
@@ -93,7 +88,7 @@ class RecipeControllerTest {
     @Test
     void testSelectAll() throws Exception {
         //When
-        Mockito.when(service.selectRecipes()).thenReturn(Stream.of(getResponseDTO()).collect(Collectors.toList()));
+        Mockito.when(service.selectRecipes()).thenReturn(Stream.of(getRecipeDTO()).collect(Collectors.toList()));
         ResultActions resultActions = mockMvc.perform(get("/select-all-recipe"));
         //Then
         resultActions.andExpect(status().isOk());

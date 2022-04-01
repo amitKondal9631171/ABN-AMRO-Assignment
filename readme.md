@@ -25,3 +25,9 @@ Tools:
 Credentials:
     GitHub Repository: https://github.com/amitKondal9631171/ABN-AMRO-Assignment.git
     API Credentials: user/password
+
+Follow the below steps to execute the executable jar file :
+	Build the code.
+	Go to project location in CMD
+    Execute command: Java -jar assignment-recipes-0.1
+	
