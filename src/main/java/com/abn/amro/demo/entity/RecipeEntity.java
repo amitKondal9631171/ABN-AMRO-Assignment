@@ -1,6 +1,5 @@
 package com.abn.amro.demo.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -19,7 +18,7 @@ public class RecipeEntity {
     private Long id;
 
     @Column(name = "recipe_name")
-     private String name;
+    private String name;
 
     @Column(name = "cooking_instructions")
     private String cookingInstructions;
