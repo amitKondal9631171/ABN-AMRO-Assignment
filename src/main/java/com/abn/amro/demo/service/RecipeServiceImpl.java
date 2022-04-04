@@ -61,9 +61,9 @@ public class RecipeServiceImpl implements RecipeService {
                     HttpStatus.NOT_FOUND);
         RecipeEntity updatedEntity = modelMapper.map(recipeDTO, RecipeEntity.class);
         logger.debug("Request mapped to Entity: {}", Boolean.TRUE);
-        modelMapper.map(recipeDao.save(updatedEntity), RecipeDTO.class);
+        recipeDTO = modelMapper.map(recipeDao.save(updatedEntity), RecipeDTO.class);
         logger.debug("Entity mapped to Response: {}", Boolean.TRUE);
-        return modelMapper.map(recipeDao.save(updatedEntity), RecipeDTO.class);
+        return recipeDTO;
     }
 
     /**
