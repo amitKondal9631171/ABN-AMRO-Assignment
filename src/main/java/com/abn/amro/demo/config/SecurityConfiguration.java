@@ -23,7 +23,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/h2-console/**", "/swagger-ui/**", "/abn-amro-assignment/**").permitAll()
-                .anyRequest().hasRole("ADMIN")
+                .anyRequest().hasRole("USER")
                 .and()
                 .httpBasic();
     }
@@ -31,9 +31,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
-                .withUser("admin")
-                .password(passwordEncoder().encode("admin"))
-                .roles("ADMIN");
+                .withUser("user")
+                .password(passwordEncoder().encode("password"))
+                .roles("USER");
     }
 
     @Bean
