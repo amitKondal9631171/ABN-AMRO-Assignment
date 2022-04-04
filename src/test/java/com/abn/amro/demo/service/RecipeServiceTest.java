@@ -50,7 +50,7 @@ class RecipeServiceTest {
     }
 
     @Test
-    void testAdd() throws Exception {
+    void addRecipeTest() throws Exception {
         //Given
         RecipeDTO recipeDTO = getRecipeDTO();
         Mockito.when(modelMapper.map(recipeDTO, RecipeEntity.class)).thenReturn(getRecipeEntity());
@@ -63,7 +63,7 @@ class RecipeServiceTest {
     }
 
     @Test
-    void testUpdate() throws Exception {
+    void updateRecipeTest() throws Exception {
         //Given
         RecipeDTO recipeDTO = getRecipeDTO();
 
@@ -78,7 +78,7 @@ class RecipeServiceTest {
     }
 
     @Test
-    void testSelect() throws Exception {
+    void selectRecipeTest() throws Exception {
         //Given
         Long recipeId = 1L;
 
@@ -91,7 +91,7 @@ class RecipeServiceTest {
     }
 
     @Test
-    void testSelectAll() throws Exception {
+    void selectListOfRecipesTest() throws Exception {
         List<RecipeEntity> entities = Stream.of(getRecipeEntity()).collect(Collectors.toList());
         //When
         Mockito.when(recipeDao.findAll()).thenReturn(entities);
@@ -103,7 +103,7 @@ class RecipeServiceTest {
     }
 
     @Test
-    void testDelete() throws Exception {
+    void deleteRecipeTest() throws Exception {
         //Given
         Long recipeId = 1L;
         when(recipeDao.findById(recipeId)).thenReturn(Optional.of(getRecipeEntity()));

@@ -43,7 +43,7 @@ class RecipeDaoTest {
     @Test
     @Order(1)
     @Rollback(value = false)
-    void testAddTest() {
+    void addRecipeTest() {
         //Given
         RecipeEntity entity = getRecipeEntity();
         //When
@@ -55,7 +55,7 @@ class RecipeDaoTest {
     @Test
     @Order(2)
     @Rollback(value = false)
-    void getRecipeTest() {
+    void selectRecipeTest() {
         //Given
         Long recipeId = 1L;
         RecipeEntity responseEntity = recipeDao.findById(recipeId).get();
@@ -64,7 +64,7 @@ class RecipeDaoTest {
 
     @Test
     @Order(3)
-    void getListOfRecipesTest() {
+    void selectListOfRecipesTest() {
 
         List<RecipeEntity> entityList = recipeDao.findAll();
 
@@ -75,7 +75,7 @@ class RecipeDaoTest {
     @Test
     @Order(4)
     @Rollback(value = false)
-    void testUpdate() {
+    void updateRecipeTest() {
         //Given
         Long recipeId = 1L;
         RecipeEntity persistedEntity = recipeDao.findById(recipeId).get();

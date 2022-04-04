@@ -45,7 +45,7 @@ class RecipeControllerTest {
     }
 
     @Test
-    void testAdd() throws Exception {
+    void addRecipeTest() throws Exception {
         //Given
         RecipeDTO recipeDTO = getRecipeDTO();
         //When
@@ -60,7 +60,7 @@ class RecipeControllerTest {
     }
 
     @Test
-    void testUpdate() throws Exception {
+    void updateRecipeTest() throws Exception {
         //Given
         RecipeDTO recipeDTO = getRecipeDTO();
         //When
@@ -75,7 +75,7 @@ class RecipeControllerTest {
     }
 
     @Test
-    void testSelect() throws Exception {
+    void selectRecipeTest() throws Exception {
         //Given
         Long recipeId = 1L;
         //When
@@ -86,7 +86,7 @@ class RecipeControllerTest {
     }
 
     @Test
-    void testSelectAll() throws Exception {
+    void selectListOfRecipesTest() throws Exception {
         //When
         Mockito.when(service.selectRecipes()).thenReturn(Stream.of(getRecipeDTO()).collect(Collectors.toList()));
         ResultActions resultActions = mockMvc.perform(get("/select-all-recipe"));
@@ -95,7 +95,7 @@ class RecipeControllerTest {
     }
 
     @Test
-    void testDelete() throws Exception {
+    void deleteRecipeTest() throws Exception {
         //Given
         Long recipeId = 1L;
         //When
