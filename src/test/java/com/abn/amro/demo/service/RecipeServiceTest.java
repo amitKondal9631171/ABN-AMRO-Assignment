@@ -22,8 +22,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -114,40 +113,37 @@ class RecipeServiceTest {
     }
 
     @Test
-    void testUpdateResourceNotFoundException() {
+    void testUpdateResourceNotFoundException() throws Exception {
         RecipeProcessingException expectedException = new RecipeProcessingException("Recipe not found to update with id: 1", HttpStatus.NOT_FOUND);
-        //Given
         Long recipeId = 1L;
-
         when(recipeDao.findById(recipeId)).thenThrow(expectedException);
-        try {
-            //When
-            recipeService.updateRecipe(getRecipeDTO());
-        } catch (IOException | RecipeProcessingException ex) {
-            //Then
-            assertSame(ex, expectedException);
-        }
+        RecipeDTO dto = getRecipeDTO();
+        RecipeProcessingException thrown = assertThrows(
+                RecipeProcessingException.class,
+                () -> recipeService.updateRecipe(dto)
+        );
+        assertSame(expectedException, thrown);
     }
 
     @Test
     void testSelectResourceNotFoundException() {
         RecipeProcessingException expectedException = new RecipeProcessingException("Recipe not found with id: 1", HttpStatus.NOT_FOUND);
         when(recipeDao.findById(1L)).thenThrow(expectedException);
-        try {
-            recipeService.selectRecipe(1L);
-        } catch (RecipeProcessingException ex) {
-            assertSame(ex, expectedException);
-        }
+        RecipeProcessingException thrown = assertThrows(
+                RecipeProcessingException.class,
+                () -> recipeService.selectRecipe(1L)
+        );
+        assertSame(expectedException, thrown);
     }
 
     @Test
     void testDeleteResourceNotFoundException() {
         RecipeProcessingException expectedException = new RecipeProcessingException("Recipe not found to select with id: 1", HttpStatus.NOT_FOUND);
         when(recipeDao.findById(1L)).thenThrow(expectedException);
-        try {
-            recipeService.deleteRecipe(1L);
-        } catch (RecipeProcessingException ex) {
-            assertSame(ex, expectedException);
-        }
+        RecipeProcessingException thrown = assertThrows(
+                RecipeProcessingException.class,
+                () -> recipeService.deleteRecipe(1L)
+        );
+        assertSame(expectedException, thrown);
     }
 }

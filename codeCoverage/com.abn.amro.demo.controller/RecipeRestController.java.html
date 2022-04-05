@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RecipeRestController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AllRecipes$API_Coverage.exec</a> &gt; <a href="index.source.html" class="el_package">com.abn.amro.demo.controller</a> &gt; <span class="el_source">RecipeRestController.java</span></div><h1>RecipeRestController.java</h1><pre class="source lang-java linenums">/**
+ * Controller with CRUD operations
+ */
+
+package com.abn.amro.demo.controller;
+
+import com.abn.amro.demo.dto.RecipeDTO;
+import com.abn.amro.demo.service.RecipeService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.List;
+
+@RestController
+<span class="fc" id="L21">public class RecipeRestController {</span>
+
+<span class="fc" id="L23">    private final Logger logger = LoggerFactory.getLogger(RecipeRestController.class);</span>
+
+    @Autowired
+    private RecipeService recipeService;
+
+    /**
+     * Endpoint receives a POST request, add the recipe and gives back the updated recipe.
+     *
+     * @return persisted entity
+     */
+    @PostMapping(value = &quot;/add-recipe&quot;)
+    public ResponseEntity&lt;RecipeDTO&gt; addRecipe(@Valid @RequestBody RecipeDTO recipeRequest) {
+<span class="fc" id="L35">        logger.info(&quot;Request received to add the recipe with name: {}&quot;, recipeRequest.getName());</span>
+<span class="fc" id="L36">        return new ResponseEntity&lt;&gt;(recipeService.addRecipe(recipeRequest), HttpStatus.CREATED);</span>
+    }
+
+    /**
+     * Endpoint receives a PUT request, update the recipe details based on ID and gives back the updated recipe.
+     *
+     * @return updated recipe
+     */
+    @PutMapping(value = &quot;/update-recipe&quot;)
+    public ResponseEntity&lt;RecipeDTO&gt; updateRecipe(@Valid @RequestBody RecipeDTO recipeRequest) {
+<span class="fc" id="L46">        logger.info(&quot;Request received to update the recipe with name and id: {} {}&quot;, recipeRequest.getName(), recipeRequest.getId());</span>
+<span class="fc" id="L47">        return new ResponseEntity&lt;&gt;(recipeService.updateRecipe(recipeRequest), HttpStatus.OK);</span>
+    }
+
+    /**
+     * Endpoint receives a GET request with recipe ID, processes it and gives back a recipe.
+     *
+     * @return return recipe based on recipe-id
+     */
+    @GetMapping(value = &quot;/select-recipe/{id}&quot;, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity&lt;RecipeDTO&gt; selectRecipe(@PathVariable Long id) {
+<span class="fc" id="L57">        logger.info(&quot;Request received to select the recipe id: {}&quot;, id);</span>
+<span class="fc" id="L58">        return new ResponseEntity&lt;&gt;(recipeService.selectRecipe(id), HttpStatus.OK);</span>
+    }
+
+    /**
+     * Endpoint receives a GET request, processes it and gives back a list of Recipes.
+     *
+     * @return all recipes
+     */
+    @GetMapping(value = &quot;/select-all-recipe&quot;, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity&lt;List&lt;RecipeDTO&gt;&gt; selectAllRecipe() {
+<span class="fc" id="L68">        logger.info(&quot;Request received to select the recipes&quot;);</span>
+<span class="fc" id="L69">        return new ResponseEntity&lt;&gt;(recipeService.selectRecipes(), HttpStatus.OK);</span>
+    }
+
+    /**
+     * Endpoint receives a DELETE request with recipe ID,
+     * delete the recipe with given recipe ID and
+     * returns the OK status.
+     *
+     * @return
+     */
+    @DeleteMapping(value = &quot;/delete-recipe/{id}&quot;)
+    public String deleteRecipe(@PathVariable Long id) {
+<span class="fc" id="L81">        logger.info(&quot;Request received to delete the recipe id: {}&quot;, id);</span>
+<span class="fc" id="L82">        recipeService.deleteRecipe(id);</span>
+<span class="fc" id="L83">        return &quot;Recipe deleted with id: &quot; + id;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

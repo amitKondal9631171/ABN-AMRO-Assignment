@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RecipeDaoTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AllRecipes$API_Coverage.exec</a> &gt; <a href="index.source.html" class="el_package">com.abn.amro.demo.dao</a> &gt; <span class="el_source">RecipeDaoTest.java</span></div><h1>RecipeDaoTest.java</h1><pre class="source lang-java linenums">package com.abn.amro.demo.dao;
+
+import com.abn.amro.demo.entity.IngredientEntity;
+import com.abn.amro.demo.entity.RecipeEntity;
+import com.abn.amro.demo.exceptions.RecipeProcessingException;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.test.annotation.Rollback;
+
+import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@DataJpaTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+<span class="fc" id="L22">class RecipeDaoTest {</span>
+
+    @Autowired
+    private RecipeDao recipeDao;
+
+    private RecipeEntity getRecipeEntity() {
+<span class="fc" id="L28">        RecipeEntity entity = new RecipeEntity();</span>
+<span class="fc" id="L29">        entity.setName(&quot;Mushroom&quot;);</span>
+<span class="fc" id="L30">        entity.setRecipeType(&quot;VEG&quot;);</span>
+<span class="fc" id="L31">        entity.setCookingInstructions(&quot;1. Boil 2 cups of water in a pot.; 2. Add 1 cup tomatoes, half inch ginger, garlic, nuts.; 3. Mix in cooking oil and cook for 15 minutes.&quot;);</span>
+<span class="fc" id="L32">        IngredientEntity ingredientEntity1 = new IngredientEntity();</span>
+<span class="fc" id="L33">        ingredientEntity1.setName(&quot;Mushroom&quot;);</span>
+<span class="fc" id="L34">        IngredientEntity ingredientEntity2 = new IngredientEntity();</span>
+<span class="fc" id="L35">        ingredientEntity2.setName(&quot;Cooking oil&quot;);</span>
+<span class="fc" id="L36">        Set&lt;IngredientEntity&gt; ingredients = new HashSet&lt;IngredientEntity&gt;();</span>
+<span class="fc" id="L37">        ingredients.add(ingredientEntity1);</span>
+<span class="fc" id="L38">        ingredients.add(ingredientEntity2);</span>
+<span class="fc" id="L39">        entity.setIngredients(ingredients);</span>
+<span class="fc" id="L40">        return entity;</span>
+    }
+
+    @Test
+    @Order(1)
+    @Rollback(value = false)
+    void addRecipeTest() {
+        //Given
+<span class="fc" id="L48">        RecipeEntity entity = getRecipeEntity();</span>
+        //When
+<span class="fc" id="L50">        RecipeEntity responseEntity = recipeDao.save(entity);</span>
+        //Then
+<span class="fc" id="L52">        Assertions.assertThat(responseEntity.getId()).isPositive();</span>
+<span class="fc" id="L53">    }</span>
+
+    @Test
+    @Order(2)
+    @Rollback(value = false)
+    void selectRecipeTest() {
+        //Given
+<span class="fc" id="L60">        Long recipeId = 1L;</span>
+<span class="fc" id="L61">        RecipeEntity responseEntity = recipeDao.findById(recipeId).get();</span>
+<span class="fc" id="L62">        Assertions.assertThat(responseEntity.getId()).isEqualTo(recipeId);</span>
+<span class="fc" id="L63">    }</span>
+
+    @Test
+    @Order(3)
+    void selectListOfRecipesTest() {
+
+<span class="fc" id="L69">        List&lt;RecipeEntity&gt; entityList = recipeDao.findAll();</span>
+
+<span class="fc" id="L71">        Assertions.assertThat(entityList).isNotEmpty();</span>
+
+<span class="fc" id="L73">    }</span>
+
+    @Test
+    @Order(4)
+    @Rollback(value = false)
+    void updateRecipeTest() {
+        //Given
+<span class="fc" id="L80">        Long recipeId = 1L;</span>
+<span class="fc" id="L81">        RecipeEntity persistedEntity = recipeDao.findById(recipeId).get();</span>
+<span class="fc" id="L82">        IngredientEntity ingredientEntity = new IngredientEntity();</span>
+<span class="fc" id="L83">        ingredientEntity.setName(&quot;Nuts&quot;);</span>
+<span class="fc" id="L84">        persistedEntity.getIngredients().add(ingredientEntity);</span>
+<span class="fc" id="L85">        RecipeEntity updatedEntity = recipeDao.save(persistedEntity);</span>
+<span class="fc" id="L86">        Assertions.assertThat(updatedEntity).isEqualTo(persistedEntity);</span>
+<span class="fc" id="L87">    }</span>
+
+    @Test
+    @Order(5)
+    @Rollback(value = false)
+    void deleteRecipeTest() {
+        //Given
+<span class="fc" id="L94">        Long recipeId = 1L;</span>
+<span class="fc" id="L95">        Optional&lt;RecipeEntity&gt; responseEntity = recipeDao.findById(recipeId);</span>
+<span class="pc" id="L96">        RecipeEntity persistedEntity = responseEntity.orElseThrow(() -&gt; new RecipeProcessingException(&quot;Recipe not found to with id: &quot; + recipeId, HttpStatus.BAD_REQUEST));</span>
+<span class="fc" id="L97">        recipeDao.delete(persistedEntity);</span>
+<span class="fc" id="L98">        Optional&lt;RecipeEntity&gt; deletedEntity = recipeDao.findById(recipeId);</span>
+<span class="fc" id="L99">        NoSuchElementException thrown = assertThrows(</span>
+<span class="fc" id="L100">                NoSuchElementException.class, deletedEntity::get</span>
+        );
+<span class="fc" id="L102">        assertTrue(thrown.getMessage().contains(&quot;No value present&quot;));</span>
+<span class="fc" id="L103">    }</span>
+
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

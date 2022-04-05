@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RecipeServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AllRecipes$API_Coverage.exec</a> &gt; <a href="index.source.html" class="el_package">com.abn.amro.demo.service</a> &gt; <span class="el_source">RecipeServiceImpl.java</span></div><h1>RecipeServiceImpl.java</h1><pre class="source lang-java linenums">package com.abn.amro.demo.service;
+
+import com.abn.amro.demo.dao.RecipeDao;
+import com.abn.amro.demo.dto.RecipeDTO;
+import com.abn.amro.demo.entity.RecipeEntity;
+import com.abn.amro.demo.exceptions.RecipeProcessingException;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+
+import java.lang.reflect.Type;
+import java.util.List;
+import java.util.Optional;
+
+/**
+ * Exception handler is responsible to handle the exceptions.
+ * {@link com.abn.amro.demo.exceptions.RecipeAPIExceptionHandler}
+ */
+@Service
+<span class="fc" id="L24">public class RecipeServiceImpl implements RecipeService {</span>
+
+<span class="fc" id="L26">    private final Logger logger = LoggerFactory.getLogger(RecipeServiceImpl.class);</span>
+    @Autowired
+    private RecipeDao recipeDao;
+    @Autowired
+    private ModelMapper modelMapper;
+
+    /**
+     * Method to persist the entity by mapping the request DTO to entity, saving the entity and finally mapping the persisted
+     * entity to the response DTO.
+     *
+     * @param recipeDTO contain api request data
+     * @return contain api response data
+     */
+    @Override
+    public RecipeDTO addRecipe(RecipeDTO recipeDTO) {
+<span class="fc" id="L41">        RecipeEntity entity = modelMapper.map(recipeDTO, RecipeEntity.class);</span>
+<span class="fc" id="L42">        logger.debug(&quot;Request mapped to Entity: {}&quot;, Boolean.TRUE);</span>
+<span class="fc" id="L43">        recipeDTO = modelMapper.map(recipeDao.save(entity), RecipeDTO.class);</span>
+<span class="fc" id="L44">        logger.debug(&quot;Entity mapped to Response: {}&quot;, Boolean.TRUE);</span>
+<span class="fc" id="L45">        return recipeDTO;</span>
+    }
+
+    /**
+     * Method to update the persisted recipe by mapping the request DTO to entity,
+     * saving the updated entity and finally mapping the persisted entity to the response DTO.
+     * If recipe not found then user friendly error message is returned.
+     *
+     * @param recipeDTO contain api request data
+     * @return contain api response data
+     */
+    public RecipeDTO updateRecipe(RecipeDTO recipeDTO) {
+<span class="fc" id="L57">        Optional&lt;RecipeEntity&gt; recipeEntity = recipeDao.findById(recipeDTO.getId());</span>
+<span class="fc" id="L58">        logger.debug(&quot;Recipe found to update {}&quot;, recipeEntity.isPresent());</span>
+<span class="pc bpc" id="L59" title="1 of 2 branches missed.">        if (!recipeEntity.isPresent())</span>
+<span class="nc" id="L60">            throw new RecipeProcessingException(&quot;Recipe not found to update with id: &quot; + recipeDTO.getId(),</span>
+                    HttpStatus.NOT_FOUND);
+<span class="fc" id="L62">        RecipeEntity updatedEntity = modelMapper.map(recipeDTO, RecipeEntity.class);</span>
+<span class="fc" id="L63">        logger.debug(&quot;Request mapped to Entity: {}&quot;, Boolean.TRUE);</span>
+<span class="fc" id="L64">        recipeDTO = modelMapper.map(recipeDao.save(updatedEntity), RecipeDTO.class);</span>
+<span class="fc" id="L65">        logger.debug(&quot;Entity mapped to Response: {}&quot;, Boolean.TRUE);</span>
+<span class="fc" id="L66">        return recipeDTO;</span>
+    }
+
+    /**
+     * Method to fetch the persisted recipe based on id. Mapping the entity to response dto.
+     * if not found then user friendly message is returned.
+     *
+     * @param id of recipe to select from records
+     * @return the recipe detail with given id
+     */
+    public RecipeDTO selectRecipe(Long id) {
+<span class="fc" id="L77">        Optional&lt;RecipeEntity&gt; recipeEntity = recipeDao.findById(id);</span>
+<span class="fc" id="L78">        logger.debug(&quot;Recipe found {}&quot;, recipeEntity.isPresent());</span>
+<span class="fc" id="L79">        return modelMapper.map(</span>
+<span class="pc" id="L80">                recipeEntity.orElseThrow(() -&gt; new RecipeProcessingException(&quot;Recipe not found to with id: &quot; + id, HttpStatus.NOT_FOUND))</span>
+                , RecipeDTO.class);
+
+    }
+
+    /**
+     * Method to fetch all the persisted recipes, sorting the recipes based on name
+     * and mapping to response DTO.
+     *
+     * @return all recipes present in records
+     */
+    @Override
+    public List&lt;RecipeDTO&gt; selectRecipes() {
+<span class="nc" id="L93">        List&lt;RecipeEntity&gt; recipeEntities = recipeDao.findAll();</span>
+<span class="nc" id="L94">        logger.debug(&quot;{} Recipe(s) found.&quot;, recipeEntities.size());</span>
+<span class="nc" id="L95">        Type type = new TypeToken&lt;List&lt;RecipeDTO&gt;&gt;() {</span>
+<span class="nc" id="L96">        }.getType();</span>
+<span class="nc" id="L97">        return modelMapper.map(recipeEntities, type);</span>
+    }
+
+    /**
+     * Method to delete the recipe with provided id.
+     * if not found then user friendly message is returned.
+     *
+     * @param id to delete the recipe from records
+     * @return true if recipe deleted
+     */
+    public boolean deleteRecipe(Long id) {
+<span class="fc" id="L108">        Optional&lt;RecipeEntity&gt; recipeEntity = recipeDao.findById(id);</span>
+<span class="fc" id="L109">        logger.debug(&quot;Recipe found to delete {}&quot;, recipeEntity.isPresent());</span>
+<span class="fc" id="L110">        recipeDao.deleteById(recipeEntity.orElseThrow(</span>
+<span class="nc" id="L111">                () -&gt; new RecipeProcessingException(&quot;Recipe not found to with id: &quot; + id, HttpStatus.NOT_FOUND)</span>
+<span class="fc" id="L112">        ).getId());</span>
+<span class="fc" id="L113">        return true;</span>
+    }
+
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

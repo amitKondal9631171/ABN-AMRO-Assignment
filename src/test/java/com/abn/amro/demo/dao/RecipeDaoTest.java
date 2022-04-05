@@ -15,7 +15,7 @@ import org.springframework.test.annotation.Rollback;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -93,15 +93,13 @@ class RecipeDaoTest {
         //Given
         Long recipeId = 1L;
         Optional<RecipeEntity> responseEntity = recipeDao.findById(recipeId);
-        RecipeEntity persistedEntity = responseEntity.orElseThrow(() -> new RecipeProcessingException("Exception executing dao layer", HttpStatus.BAD_REQUEST));
+        RecipeEntity persistedEntity = responseEntity.orElseThrow(() -> new RecipeProcessingException("Recipe not found to with id: " + recipeId, HttpStatus.BAD_REQUEST));
         recipeDao.delete(persistedEntity);
-        NoSuchElementException expected = new NoSuchElementException("No value present");
-        try {
-
-            recipeDao.findById(recipeId);
-        } catch (NoSuchElementException actualException) {
-            assertSame(actualException, expected);
-        }
+        Optional<RecipeEntity> deletedEntity = recipeDao.findById(recipeId);
+        NoSuchElementException thrown = assertThrows(
+                NoSuchElementException.class, deletedEntity::get
+        );
+        assertTrue(thrown.getMessage().contains("No value present"));
     }
 
 }
