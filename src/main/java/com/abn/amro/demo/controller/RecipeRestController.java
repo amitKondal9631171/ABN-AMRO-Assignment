@@ -4,6 +4,7 @@
 
 package com.abn.amro.demo.controller;
 
+import com.abn.amro.demo.config.ApplicationProperties;
 import com.abn.amro.demo.dto.RecipeDTO;
 import com.abn.amro.demo.service.RecipeService;
 import org.slf4j.Logger;
@@ -17,10 +18,13 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-@RestController
+@RestController()
 public class RecipeRestController {
 
     private final Logger logger = LoggerFactory.getLogger(RecipeRestController.class);
+
+    @Autowired
+    public ApplicationProperties applicationProperties;
 
     @Autowired
     private RecipeService recipeService;
@@ -33,7 +37,8 @@ public class RecipeRestController {
     @PostMapping(value = "/add-recipe")
     public ResponseEntity<RecipeDTO> addRecipe(@Valid @RequestBody RecipeDTO recipeRequest) {
         logger.info("Request received to add the recipe with name: {}", recipeRequest.getName());
-        return new ResponseEntity<>(recipeService.addRecipe(recipeRequest), HttpStatus.CREATED);
+        RecipeDTO dto = recipeService.addRecipe(recipeRequest);
+        return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
 
     /**
@@ -65,7 +70,8 @@ public class RecipeRestController {
      */
     @GetMapping(value = "/select-all-recipe", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<RecipeDTO>> selectAllRecipe() {
-        logger.info("Request received to select the recipes");
+        logger.info("Request received to select the recipes "+ applicationProperties.getHostName());
+
         return new ResponseEntity<>(recipeService.selectRecipes(), HttpStatus.OK);
     }
 
