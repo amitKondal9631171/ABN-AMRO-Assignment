@@ -1,6 +1,7 @@
 package com.abn.amro.demo.logger;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
  import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
@@ -10,20 +11,21 @@ import org.aspectj.lang.reflect.MethodSignature;
 
 @Aspect
 @Configuration
+@Slf4j
 public class BasicLoggingAspect {
 
     @Before("execution(* com.abn.amro.demo.*.*.*(..))")
     public void before(JoinPoint joinPoint ){
         String className = joinPoint.getSignature().getDeclaringType().getCanonicalName();
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-        System.out.println( className + " ======= " + signature.getMethod().getName() );
+        log.info( className + " ======= " + signature.getMethod().getName() );
     }
 
     @After("execution(* com.abn.amro.demo.*.*.*(..))")
     public void after(JoinPoint joinPoint){
         Object[] signatureArgs = joinPoint.getArgs();
         for (Object signatureArg: signatureArgs) {
-            System.out.println("Arg: " + signatureArg);
+            log.info("Arg: " + signatureArg);
         }
     }
 }
